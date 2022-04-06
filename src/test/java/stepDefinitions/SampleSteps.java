@@ -11,8 +11,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class SampleSteps {
     private WebDriver driver;
@@ -115,13 +114,102 @@ public class SampleSteps {
                 driver.findElement(By.id("heading_2")).getText());
     }
 
-    @And("^I should be able to click buttons$")
+    @Then("^I should be able to click buttons$")
     public void iShouldBeAbleToClickButtons() throws Throwable {
         assertTrue(driver.findElement(By.name("randomButton1")).isEnabled());
         assertTrue(driver.findElement(By.name("randomButton2")).isEnabled());
 
     }
 
+
+
+    @Then("^I see error: \"([^\"]*)\"$")
+    public void iSeeAgeError(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("error")).getText());
+    }
+
+    @And("^I am not navigated to age message page$")
+    public void notNavigatedToAgeMessagePage() throws Throwable {
+        assertFalse(driver.getCurrentUrl().contains("https://kristinek.github.io/site/examples/age_2.html"));
+        assertTrue(driver.getCurrentUrl().contains("https://kristinek.github.io/site/examples/age"));
+    }
+
+    @Given("^I (?:am on|open) a feedback page$")
+    public void iAmOnFeedbackPage() throws Throwable {
+        driver.get("https://kristinek.github.io/site/tasks/provide_feedback");
+    }
+
+    @When("^I enter name in feedback: \"([^\"]*)\"$")
+    public void iEnterNameInFeedback(String name) throws Throwable {
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(name);
+    }
+
+    @And("^I enter age in feedback: ([^\"]*)$")
+    public void iEnterAgeInFeedback(String age) throws Throwable {
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(age);
+    }
+
+    @And("^I click send button$")
+    public void iClickTheSendButton() throws Throwable {
+        driver.findElement(By.className("w3-btn-block")).click();
+    }
+
+    @Then("^I can see name \"([^\"]*)\" in feedback check$")
+    public void iSeeName(String name) throws Throwable {
+        assertEquals(name, driver.findElement(By.id("name")).getText());
+    }
+
+    @Then("^I can see age \"([^\"]*)\" in feedback check$")
+    public void iSeeAge(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    @Given("^I (?:am on|open) Number page$")
+    public void iAmOnNumberPage() throws Throwable {
+        driver.get("https://kristinek.github.io/site/tasks/enter_a_number");
+    }
+
+    @When("^I enter number \"([^\"]*)\"$")
+    public void iEnterMyInvalidNumber(String number) throws Throwable {
+        driver.findElement(By.xpath("//*[@id='numb']")).clear();
+        driver.findElement(By.xpath("//*[@id='numb']")).sendKeys(number);
+    }
+
+    @And("^I click submit$")
+    public void iClickTheeSubmit() throws Throwable {
+        driver.findElement(By.xpath("/html/body/div[2]/div/div/div[2]/button")).click();
+        Thread.sleep(1000);
+    }
+
+    @Then("^I see error message \"([^\"]*)\"$")
+    public void iSeeTheMessage(String message) throws Throwable {
+        assertEquals(message, driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @When("^I enter my valid number \"([^\"]*)\"$")
+    public void iEnterMyValidNumber(String number) throws Throwable {
+        driver.findElement(By.xpath("//*[@id='numb']")).clear();
+        driver.findElement(By.xpath("//*[@id='numb']")).sendKeys(number);
+    }
+
+    @Then("^I see Alert saying \"([^\"]*)\"$")
+    public void iSeeTheAlert(String alert) throws Throwable {
+        assertEquals("Square root of 81 is 9.00", driver.switchTo().alert().getText());
+    }
+
+    @And("^I click Ok$")
+    public void iAcceptTheAlert() throws Throwable {
+        driver.switchTo().alert().accept();
+    }
+
+    @And("^I get returned to initial page with clear input field and no errors$")
+    public void iGetReturnedToFirstPage() throws Throwable {
+        assertTrue(driver.getCurrentUrl().contains("https://kristinek.github.io/site/tasks/enter_a_number"));
+        assertEquals("", driver.findElement(By.id("numb")).getText());
+        assertEquals("", driver.findElement(By.id("ch1_error")).getText());
+    }
 }
 
 
