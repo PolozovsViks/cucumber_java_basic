@@ -28,8 +28,6 @@ Feature: Introduction to cucumber part 3
   # Set name and age based on test Examples
   # Click "Send" button and verify that previous input is displayed in correct fields
 
-
-
   @example2example
   Scenario Outline: a new scenario outline
     Given I am on a feedback page

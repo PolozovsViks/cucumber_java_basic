@@ -31,3 +31,48 @@ Feature: Introduction to cucumber part 4
       | Ann  | 5   | Hello, Ann, you are a kid    |
       | Bob  | 61  | Hello, Bob, you are an adult |
 
+# TODO - create Scenario Outline for 'Give us your feedback!' page
+  # URL: https://kristinek.github.io/site/tasks/provide_feedback
+  # Navigate to page
+  # Set Name, Age and Genre
+  # - All input MUST be done in single step
+  # - All input MUST use Examples for data
+  # - Step can use Map or Domain object
+  # Click "Send" button and verify that previous input is displayed in correct fields
+
+  @focusss
+  Scenario: Feedback with only languages1
+    Given I am on a feedback page
+    When I enter input in feedback page
+      | name | John |
+      | age  | 22  |
+      | genre  | male  |
+    And I click send button
+    Then I can see name "John" in feedback check
+    And I can see age "22" in feedback check
+    And I can see genre "male" in feedback check
+
+  Scenario: Feedback with only languages2
+    Given I am on a feedback page
+    When I enter input in feedback page as data table
+      | name | age | genre |
+      | John | 22  | male  |
+    And I click send button
+    Then I can see name "John" in feedback check
+    And I can see age "22" in feedback check
+    And I can see genre "male" in feedback check
+
+  Scenario Outline: Feedback with only language3
+    Given I am on a feedback page
+    When I enter input in feedback page
+      | name  | <name>  |
+      | age   | <age>   |
+      | genre | <genre> |
+    And I click send button
+    Then I can see name "<name>" in feedback check
+    And I can see age "<age>" in feedback check
+    And I can see genre "<genre>" in feedback check
+    Examples:
+      | name  | age | genre  |
+      | Tom   | 22  | male   |
+      | Sara  | 33  | female |

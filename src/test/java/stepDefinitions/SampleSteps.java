@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -154,6 +155,7 @@ public class SampleSteps {
     @And("^I click send button$")
     public void iClickTheSendButton() throws Throwable {
         driver.findElement(By.className("w3-btn-block")).click();
+        Thread.sleep(3000);
     }
 
     @Then("^I can see name \"([^\"]*)\" in feedback check$")
@@ -164,6 +166,11 @@ public class SampleSteps {
     @Then("^I can see age \"([^\"]*)\" in feedback check$")
     public void iSeeAge(String age) throws Throwable {
         assertEquals(age, driver.findElement(By.id("age")).getText());
+    }
+
+    @Then("^I can see genre \"([^\"]*)\" in feedback check$")
+    public void iSeeGenre(String age) throws Throwable {
+        assertEquals(age, driver.findElement(By.id("gender")).getText());
     }
 
     @Given("^I (?:am on|open) Number page$")
@@ -209,6 +216,39 @@ public class SampleSteps {
         assertTrue(driver.getCurrentUrl().contains("https://kristinek.github.io/site/tasks/enter_a_number"));
         assertEquals("", driver.findElement(By.id("numb")).getText());
         assertEquals("", driver.findElement(By.id("ch1_error")).getText());
+    }
+
+    @When("^I select the feedback languages$")
+    public void iSelectFeedbackLanguages(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.xpath("//input[@class='w3-check' and @value='" + language + "']")).click();
+        }
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check$")
+    public void iCanSeeLanguages(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+    }
+
+
+    @When("^I enter input in feedback page$")
+    public void iEnterInputInFeedback(Map<String, String> feedbackInput) throws Throwable {
+        if (feedbackInput.containsKey("name")) {
+            iEnterNameInFeedback(feedbackInput.get("name"));
+        }
+        iEnterAgeInFeedback(feedbackInput.get("age"));
+        driver.findElement(By.xpath("//input[@value='" + feedbackInput.get("genre") + "']")).click();
+    }
+
+    @When("^I enter input in feedback page as data table$")
+    public void iEnterInputInFeedback(DataTable inputTable) throws Throwable {
+        for(Map<String, String> feedbackInput : inputTable.asMaps(String.class, String.class)) {
+            if (feedbackInput.containsKey("name")) {
+                iEnterNameInFeedback(feedbackInput.get("name"));
+            }
+            iEnterAgeInFeedback(feedbackInput.get("age"));
+            driver.findElement(By.xpath("//input[@value='" + feedbackInput.get("genre") + "']")).click();
+        }
     }
 }
 
